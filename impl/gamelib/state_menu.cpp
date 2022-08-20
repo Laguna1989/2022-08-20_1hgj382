@@ -86,7 +86,7 @@ void StateMenu::createTextExplanation()
 {
     float half_width = GP::GetScreenSize().x / 2;
 
-    std::string text = "Press Space to start the game\n[Q,A] for Player 1\n[O,P] for player 2";
+    std::string text = "Press Space to start the game\n[Q,W] for Player 1\n[O,P] for player 2";
     if (m_score != -1) {
         text += "\nLastScore: " + std::to_string(m_score);
     }
