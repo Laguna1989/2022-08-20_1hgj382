@@ -62,7 +62,7 @@ void StateMenu::createTextCredits()
         16U, GP::PaletteFontCredits());
     m_text_Credits->setTextAlign(jt::Text::TextAlign::LEFT);
     m_text_Credits->setPosition({ 10, GP::GetScreenSize().y - 70 });
-    m_text_Credits->setShadow(GP::PaletteFontShadow(), jt::Vector2f { 1, 1 });
+    m_text_Credits->setShadow(GP::PaletteFontCreditsShadow(), jt::Vector2f { 1, 1 });
 
     m_text_Version = jt::dh::createText(renderTarget(), "", 16U, GP::PaletteFontCredits());
     if (jt::BuildInfo::gitTagName() != "") {
@@ -72,7 +72,7 @@ void StateMenu::createTextCredits()
     }
     m_text_Version->setTextAlign(jt::Text::TextAlign::RIGHT);
     m_text_Version->setPosition({ GP::GetScreenSize().x - 5.0f, GP::GetScreenSize().y - 20.0f });
-    m_text_Version->setShadow(GP::PaletteFontShadow(), jt::Vector2f { 1, 1 });
+    m_text_Version->setShadow(GP::PaletteFontCreditsShadow(), jt::Vector2f { 1, 1 });
 }
 
 void StateMenu::createTextExplanation()
