@@ -40,11 +40,13 @@ private:
     bool m_runner2ExpectedKey { false };
     float m_runner2Value { 0.0f };
 
+    std::shared_ptr<jt::Shape> m_goal;
+
     void doInternalCreate() override;
     void doInternalUpdate(float const elapsed) override;
     void doInternalDraw() const override;
 
-    void endGame();
+    void endGame(int runner);
     void createPlayer();
 };
 

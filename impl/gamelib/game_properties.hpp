@@ -10,8 +10,8 @@ class GP {
 public:
     GP() = delete;
 
-    static std::string GameName() { return "MyAwesomeGame"; }
-    static std::string AuthorName() { return "LAguna_999"; }
+    static std::string GameName() { return "Long distance runner"; }
+    static std::string AuthorName() { return "Laguna_999"; }
     static std::string JamName() { return "1hgj382"; }
     static std::string JamDate() { return "2022-08-20"; }
 
@@ -20,7 +20,7 @@ public:
     static jt::Vector2f GetScreenSize() { return GetWindowSize() * (1.0f / GetZoom()); }
 
     static jt::Color PaletteBackground() { return GP::getPalette().getColor(0); }
-    static jt::Color PaletteFontFront() { return GP::getPalette().getColor(2); }
+    static jt::Color PaletteFontFront() { return GP::getPalette().getColor(3); }
     static jt::Color PaletteFontShadow() { return GP::getPalette().getColor(1); }
     static jt::Color PaletteFontCredits() { return GP::getPalette().getColor(5); }
     static jt::Color PaletteFontCreditsShadow() { return GP::getPalette().getColor(6); }

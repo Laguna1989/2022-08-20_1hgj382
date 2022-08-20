@@ -39,11 +39,15 @@ void StateGame::doInternalCreate()
 
     m_runner1 = std::make_shared<jt::Shape>();
     m_runner1->makeRect(jt::Vector2f { 24, 64 }, textureManager());
-    m_runner1->setPosition(jt::Vector2f { 0, GP::GetScreenSize().y / 2 - 24 - 64 });
+    m_runner1->setPosition(jt::Vector2f { 24, GP::GetScreenSize().y / 2 - 24 - 64 });
 
     m_runner2 = std::make_shared<jt::Shape>();
     m_runner2->makeRect(jt::Vector2f { 24, 64 }, textureManager());
-    m_runner2->setPosition(jt::Vector2f { 0, GP::GetScreenSize().y - 24 - 64 });
+    m_runner2->setPosition(jt::Vector2f { 24, GP::GetScreenSize().y - 24 - 64 });
+
+    m_goal = std::make_shared<jt::Shape>();
+    m_goal->makeRect(jt::Vector2f { 6, GP::GetScreenSize().y }, textureManager());
+    m_goal->setPosition(jt::Vector2f { GP::GetScreenSize().x - 48, 0 });
 
     m_vignette = std::make_shared<jt::Vignette>(GP::GetScreenSize());
     add(m_vignette);
@@ -78,7 +82,8 @@ void getInputRunner(std::shared_ptr<jt::Shape> runner, float& runnerValue, bool&
     }
 
     auto pos = runner->getPosition();
-    pos += jt::Vector2f { elapsed * runnerValue * 13, 0 };
+    auto const factor = 30.0f;
+    pos += jt::Vector2f { elapsed * runnerValue * factor, 0 };
 
     runner->setPosition(pos);
 }
@@ -94,9 +99,16 @@ void StateGame::doInternalUpdate(float const elapsed)
 
         getInputRunner(m_runner2, m_runner2Value, m_runner2ExpectedKey, elapsed, getGame()->input(),
             jt::KeyCode::O, jt::KeyCode::P);
+
+        if (m_runner1->getPosition().x >= GP::GetScreenSize().x - 48 - 24) {
+            endGame(1);
+        } else if (m_runner2->getPosition().x >= GP::GetScreenSize().x - 48 - 24) {
+            endGame(2);
+        }
     }
 
     m_background->update(elapsed);
+    m_goal->update(elapsed);
     m_floor1->update(elapsed);
     m_floor2->update(elapsed);
     m_runner1->update(elapsed);
@@ -107,6 +119,7 @@ void StateGame::doInternalUpdate(float const elapsed)
 void StateGame::doInternalDraw() const
 {
     m_background->draw(renderTarget());
+    m_goal->draw(renderTarget());
     m_floor1->draw(renderTarget());
     m_floor2->draw(renderTarget());
     m_runner1->draw(renderTarget());
@@ -116,7 +129,7 @@ void StateGame::doInternalDraw() const
     m_hud->draw();
 }
 
-void StateGame::endGame()
+void StateGame::endGame(int runner)
 {
     if (m_hasEnded) {
         // trigger this function only once
@@ -125,6 +138,8 @@ void StateGame::endGame()
     m_hasEnded = true;
     m_running = false;
 
-    getGame()->stateManager().switchState(std::make_shared<StateMenu>());
+    auto state = std::make_shared<StateMenu>();
+    state->setScore(runner);
+    getGame()->stateManager().switchState(state);
 }
 std::string StateGame::getName() const { return "Game"; }

@@ -30,7 +30,7 @@ private:
     std::shared_ptr<jt::Shape> m_overlay;
     std::shared_ptr<jt::Vignette> m_vignette;
 
-    int m_score { 0 };
+    int m_score { -1 };
 
     bool m_started { false };
 

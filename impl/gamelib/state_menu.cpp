@@ -78,8 +78,12 @@ void StateMenu::createTextCredits()
 void StateMenu::createTextExplanation()
 {
     float half_width = GP::GetScreenSize().x / 2;
-    m_text_Explanation = jt::dh::createText(
-        renderTarget(), "Press Space to start the game", 16U, GP::PaletteFontFront());
+
+    std::string text = "Press Space to start the game\n[Q,A] for Player 1\n[O,P] for player 2";
+    if (m_score != -1) {
+        text += "\nLastScore: " + std::to_string(m_score);
+    }
+    m_text_Explanation = jt::dh::createText(renderTarget(), text, 16U, GP::PaletteFontFront());
     m_text_Explanation->setPosition({ half_width, 150 });
     m_text_Explanation->setShadow(GP::PaletteFontShadow(), jt::Vector2f { 3, 3 });
 }
@@ -97,7 +101,7 @@ void StateMenu::createTweens()
     createTweenOverlayAlpha();
     createTweenTitleAlpha();
     createTweenCreditsPosition();
-    createTweenExplanationScale();
+    //    createTweenExplanationScale();
 }
 
 void StateMenu::createInstructionTweenScaleUp()
