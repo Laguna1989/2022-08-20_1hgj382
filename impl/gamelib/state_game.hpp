@@ -3,7 +3,6 @@
 
 #include <box2dwrapper/box2d_world_interface.hpp>
 #include <game_state.hpp>
-#include <player/player.hpp>
 #include <memory>
 #include <vector>
 
@@ -25,13 +24,21 @@ private:
     std::shared_ptr<jt::Vignette> m_vignette;
     std::shared_ptr<Hud> m_hud;
     std::shared_ptr<jt::Box2DWorldInterface> m_world { nullptr };
-    std::shared_ptr<Player> m_player { nullptr };
 
     bool m_running { true };
     bool m_hasEnded { false };
 
     int m_scoreP1 { 0 };
-    int m_scoreP2 { 0 };
+
+    std::shared_ptr<jt::Shape> m_floor1;
+    std::shared_ptr<jt::Shape> m_floor2;
+
+    std::shared_ptr<jt::Shape> m_runner1;
+    bool m_runner1ExpectedKey { false };
+    float m_runner1Value { 0.0f };
+    std::shared_ptr<jt::Shape> m_runner2;
+    bool m_runner2ExpectedKey { false };
+    float m_runner2Value { 0.0f };
 
     void doInternalCreate() override;
     void doInternalUpdate(float const elapsed) override;

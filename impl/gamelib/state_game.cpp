@@ -9,6 +9,7 @@
 #include <sprite.hpp>
 #include <state_menu.hpp>
 #include <tweens/tween_alpha.hpp>
+#include <iostream>
 
 void StateGame::doInternalCreate()
 {
@@ -26,7 +27,23 @@ void StateGame::doInternalCreate()
     m_background->setIgnoreCamMovement(true);
     m_background->update(0.0f);
 
-    createPlayer();
+    m_floor1 = std::make_shared<jt::Shape>();
+    m_floor1->makeRect(jt::Vector2f { GP::GetScreenSize().x, 24 }, textureManager());
+    m_floor1->setPosition(jt::Vector2f { 0, GP::GetScreenSize().y / 2 - 24 });
+    m_floor1->setColor(GP::getPalette().getColor(3));
+
+    m_floor2 = std::make_shared<jt::Shape>();
+    m_floor2->makeRect(jt::Vector2f { GP::GetScreenSize().x, 24 }, textureManager());
+    m_floor2->setPosition(jt::Vector2f { 0, GP::GetScreenSize().y - 24 });
+    m_floor2->setColor(GP::getPalette().getColor(3));
+
+    m_runner1 = std::make_shared<jt::Shape>();
+    m_runner1->makeRect(jt::Vector2f { 24, 64 }, textureManager());
+    m_runner1->setPosition(jt::Vector2f { 0, GP::GetScreenSize().y / 2 - 24 - 64 });
+
+    m_runner2 = std::make_shared<jt::Shape>();
+    m_runner2->makeRect(jt::Vector2f { 24, 64 }, textureManager());
+    m_runner2->setPosition(jt::Vector2f { 0, GP::GetScreenSize().y - 24 - 64 });
 
     m_vignette = std::make_shared<jt::Vignette>(GP::GetScreenSize());
     add(m_vignette);
@@ -37,12 +54,33 @@ void StateGame::doInternalCreate()
     setAutoDraw(false);
 }
 
-void StateGame::createPlayer()
+void getInputRunner(std::shared_ptr<jt::Shape> runner, float& runnerValue, bool& runnerKey,
+    float elapsed, jt::InputGetInterface& input, jt::KeyCode key1, jt::KeyCode key2)
+
 {
-    b2BodyDef def;
-    def.type = b2BodyType::b2_dynamicBody;
-    m_player = std::make_shared<Player>(m_world, &def, *this);
-    add(m_player);
+    runnerValue -= elapsed;
+    if (runnerValue <= 0.0f) {
+        runnerValue = 0.0f;
+    }
+
+    auto expectedKey = key1;
+    if (runnerKey) {
+        expectedKey = key2;
+    }
+    if (input.keyboard()->justPressed(expectedKey)) {
+        runnerKey = !runnerKey;
+        runnerValue += 0.15f;
+    }
+
+    auto const maxSpeed = 0.6f;
+    if (runnerValue >= maxSpeed) {
+        runnerValue -= elapsed;
+    }
+
+    auto pos = runner->getPosition();
+    pos += jt::Vector2f { elapsed * runnerValue * 13, 0 };
+
+    runner->setPosition(pos);
 }
 
 void StateGame::doInternalUpdate(float const elapsed)
@@ -50,23 +88,29 @@ void StateGame::doInternalUpdate(float const elapsed)
     if (m_running) {
         m_world->step(elapsed, GP::PhysicVelocityIterations(), GP::PhysicPositionIterations());
         // update game logic here
-        if (getGame()->input().keyboard()->justPressed(jt::KeyCode::A)) {
-            m_scoreP1++;
-            m_hud->getObserverScoreP1()->notify(m_scoreP1);
-        }
-        if (getGame()->input().keyboard()->justPressed(jt::KeyCode::D)) {
-            m_scoreP2++;
-            m_hud->getObserverScoreP2()->notify(m_scoreP2);
-        }
+
+        getInputRunner(m_runner1, m_runner1Value, m_runner1ExpectedKey, elapsed, getGame()->input(),
+            jt::KeyCode::Q, jt::KeyCode::W);
+
+        getInputRunner(m_runner2, m_runner2Value, m_runner2ExpectedKey, elapsed, getGame()->input(),
+            jt::KeyCode::O, jt::KeyCode::P);
     }
 
     m_background->update(elapsed);
+    m_floor1->update(elapsed);
+    m_floor2->update(elapsed);
+    m_runner1->update(elapsed);
+    m_runner2->update(elapsed);
     m_vignette->update(elapsed);
 }
 
 void StateGame::doInternalDraw() const
 {
     m_background->draw(renderTarget());
+    m_floor1->draw(renderTarget());
+    m_floor2->draw(renderTarget());
+    m_runner1->draw(renderTarget());
+    m_runner2->draw(renderTarget());
     drawObjects();
     m_vignette->draw();
     m_hud->draw();
