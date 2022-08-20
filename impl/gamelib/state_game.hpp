@@ -1,6 +1,7 @@
 ﻿#ifndef GAME_STATE_GAME_HPP
 #define GAME_STATE_GAME_HPP
 
+#include "star.hpp"
 #include "text.hpp"
 #include <box2dwrapper/box2d_world_interface.hpp>
 #include <game_state.hpp>
@@ -46,6 +47,8 @@ private:
     std::shared_ptr<jt::Text> m_textR1;
     std::shared_ptr<jt::Text> m_textR2;
     bool m_lastBigger { false };
+
+    std::vector<std::shared_ptr<Star>> m_stars;
 
     void doInternalCreate() override;
     void doInternalUpdate(float const elapsed) override;

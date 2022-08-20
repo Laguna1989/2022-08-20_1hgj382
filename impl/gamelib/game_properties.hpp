@@ -22,8 +22,8 @@ public:
     static jt::Color PaletteBackground() { return GP::getPalette().getColor(0); }
     static jt::Color PaletteFontFront() { return GP::getPalette().getColor(3); }
     static jt::Color PaletteFontShadow() { return GP::getPalette().getColor(1); }
-    static jt::Color PaletteFontCredits() { return GP::getPalette().getColor(5); }
-    static jt::Color PaletteFontCreditsShadow() { return GP::getPalette().getColor(6); }
+    static jt::Color PaletteFontCredits() { return GP::getPalette().getColor(3); }
+    static jt::Color PaletteFontCreditsShadow() { return GP::getPalette().getColor(1); }
 
     static jt::Palette getPalette();
 

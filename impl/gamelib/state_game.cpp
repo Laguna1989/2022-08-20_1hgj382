@@ -68,6 +68,11 @@ void StateGame::doInternalCreate()
     m_hud = std::make_shared<Hud>();
     add(m_hud);
 
+    for (auto i = 0; i != 100; ++i) {
+        auto s = std::make_shared<Star>();
+        m_stars.push_back(s);
+        add(s);
+    }
     // StateGame will call drawObjects itself.
     setAutoDraw(false);
 }
@@ -175,12 +180,13 @@ void StateGame::updateLeaderText()
 void StateGame::doInternalDraw() const
 {
     m_background->draw(renderTarget());
+    drawObjects();
     m_goal->draw(renderTarget());
     m_floor1->draw(renderTarget());
     m_floor2->draw(renderTarget());
     m_runner1->draw(renderTarget());
     m_runner2->draw(renderTarget());
-    drawObjects();
+
     m_vignette->draw();
 
     m_textR1->draw(renderTarget());

@@ -22,6 +22,13 @@
 
 void StateMenu::doInternalCreate()
 {
+
+    for (auto i = 0; i != 100; ++i) {
+        auto s = std::make_shared<Star>();
+        m_stars.push_back(s);
+        add(s);
+    }
+
     createMenuText();
     createShapes();
     createVignette();
@@ -204,7 +211,7 @@ void StateMenu::startTransitionToStateGame()
 void StateMenu::doInternalDraw() const
 {
     m_background->draw(renderTarget());
-
+    drawObjects();
     m_text_Title->draw(renderTarget());
     m_text_Explanation->draw(renderTarget());
     m_text_Credits->draw(renderTarget());

@@ -1,6 +1,7 @@
 ﻿#ifndef GAME_STATE_MENU_HPP
 #define GAME_STATE_MENU_HPP
 
+#include "star.hpp"
 #include <game_state.hpp>
 
 namespace jt {
@@ -33,6 +34,8 @@ private:
     int m_score { -1 };
 
     bool m_started { false };
+
+    std::vector<std::shared_ptr<Star>> m_stars;
 
     void doInternalCreate() override;
 
